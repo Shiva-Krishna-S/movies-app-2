@@ -254,8 +254,8 @@
   flex-wrap: wrap;
 }
 
-.failure-view-page-container {
-  min-height: 80vh;
+.movie-item-failure-view-page-container {
+  min-height: 87vh;
   display: flex;
   flex-direction: column;
   justify-content: center;

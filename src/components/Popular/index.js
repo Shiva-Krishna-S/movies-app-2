@@ -24,30 +24,36 @@ class Popular extends Component {
   }
 
   getPopularMovies = async () => {
-    this.setState({apiStatus: apiStatusConstants.inProgress})
-    const jwtToken = Cookies.get('jwt_token')
-    const apiUrl = 'https://apis.ccbp.in/movies-app/popular-movies'
-    const options = {
-      headers: {
-        Authorization: `Bearer ${jwtToken}`,
-      },
-      method: 'GET',
-    }
-    const response = await fetch(apiUrl, options)
-    if (response.ok) {
-      const fetchedData = await response.json()
-      const updatedPopularData = fetchedData.results.map(eachMovie => ({
-        backdropPath: eachMovie.backdrop_path,
-        id: eachMovie.id,
-        overview: eachMovie.overview,
-        posterPath: eachMovie.poster_path,
-        title: eachMovie.title,
-      }))
-      this.setState({
-        popularMoviesList: updatedPopularData,
-        apiStatus: apiStatusConstants.success,
-      })
-    } else {
+    try {
+      this.setState({apiStatus: apiStatusConstants.inProgress})
+      const jwtToken = Cookies.get('jwt_token')
+      const apiUrl = 'https://apis.ccbp.in/movies-app/popular-movies'
+      const options = {
+        headers: {
+          Authorization: `Bearer ${jwtToken}`,
+        },
+        method: 'GET',
+      }
+      const response = await fetch(apiUrl, options)
+      if (response.ok) {
+        const fetchedData = await response.json()
+        const updatedPopularData = fetchedData.results.map(eachMovie => ({
+          backdropPath: eachMovie.backdrop_path,
+          id: eachMovie.id,
+          overview: eachMovie.overview,
+          posterPath: eachMovie.poster_path,
+          title: eachMovie.title,
+        }))
+        this.setState({
+          popularMoviesList: updatedPopularData,
+          apiStatus: apiStatusConstants.success,
+        })
+      } else if (response.status === 404 || response.status === 401) {
+        this.setState({apiStatus: apiStatusConstants.failure})
+      } else {
+        this.setState({apiStatus: apiStatusConstants.failure})
+      }
+    } catch (error) {
       this.setState({apiStatus: apiStatusConstants.failure})
     }
   }
@@ -63,7 +69,7 @@ class Popular extends Component {
   }
 
   renderFailureView = () => (
-    <div className="failure-view-page-container">
+    <div className="popular-failure-view-page-container">
       <img
         src="https://res.cloudinary.com/df8n5yti7/image/upload/v1671028483/Background-CompleteSomething_went_wrong_lpwr8q.png"
         alt="failure view"
@@ -87,7 +93,12 @@ class Popular extends Component {
   renderPopularMoviesList = () => {
     const {popularMoviesList} = this.state
 
-    return <PopularMoviesPagination popularMoviesList={popularMoviesList} />
+    return (
+      <>
+        <PopularMoviesPagination popularMoviesList={popularMoviesList} />
+        <Footer />
+      </>
+    )
   }
 
   renderPopularMovies = () => {
@@ -112,7 +123,6 @@ class Popular extends Component {
       <div className="popular-page-background-container">
         <Header pageContentsLoading={pageContentsLoading} />
         {this.renderPopularMovies()}
-        <Footer />
       </div>
     )
   }

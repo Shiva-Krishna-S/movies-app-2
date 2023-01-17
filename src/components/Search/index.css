@@ -4,7 +4,7 @@
 }
 
 .search-page-content-container {
-  min-height: 85vh;
+  min-height: 87vh;
   width: 80%;
   max-width: 1110px;
   margin: auto;
@@ -64,7 +64,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  min-height: 80vh;
+  min-height: 85vh;
 }
 
 @media screen and (min-width: 768px) {
@@ -102,8 +102,8 @@
   }
 }
 
-failure-view-page-container {
-  min-height: 80vh;
+.search-page-failure-view-page-container {
+  min-height: 87vh;
   display: flex;
   flex-direction: column;
   justify-content: center;

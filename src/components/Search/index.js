@@ -39,32 +39,43 @@ class Search extends Component {
   }
 
   getSearchResults = async () => {
-    this.setState({apiStatus: apiStatusConstants.inProgress})
-    const {query} = this.state
-    const jwtToken = Cookies.get('jwt_token')
-    const apiUrl = `https://apis.ccbp.in/movies-app/movies-search?search=${query}`
-    const options = {
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer ${jwtToken}`,
-      },
-    }
-    const response = await fetch(apiUrl, options)
-    if (response.ok) {
-      const data = await response.json()
-      const updatedData = data.results.map(eachMovie => ({
-        posterPath: eachMovie.poster_path,
-        title: eachMovie.title,
-        id: eachMovie.id,
-        backdropPath: eachMovie.backdrop_path,
-      }))
+    try {
+      this.setState({apiStatus: apiStatusConstants.inProgress})
+      const {query} = this.state
+      const jwtToken = Cookies.get('jwt_token')
+      const apiUrl = `https://apis.ccbp.in/movies-app/movies-search?search=${query}`
+      const options = {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${jwtToken}`,
+        },
+      }
+      const response = await fetch(apiUrl, options)
+      //   console.log(response)
+      if (response.ok) {
+        const data = await response.json()
+        const updatedData = data.results.map(eachMovie => ({
+          posterPath: eachMovie.poster_path,
+          title: eachMovie.title,
+          id: eachMovie.id,
+          backdropPath: eachMovie.backdrop_path,
+        }))
+        this.setState({
+          searchMoviesList: updatedData,
+          apiStatus: apiStatusConstants.success,
+        })
+      } else if (response.status === 404 || response.status === 401) {
+        this.setState({
+          apiStatus: apiStatusConstants.failure,
+        })
+      } else {
+        this.setState({
+          apiStatus: apiStatusConstants.failure,
+        })
+      }
+    } catch (error) {
       this.setState({
-        searchMoviesList: updatedData,
-        apiStatus: apiStatusConstants.success,
-      })
-    } else {
-      this.setState({
-        apiStatus: apiStatusConstants.inProgress,
+        apiStatus: apiStatusConstants.failure,
       })
     }
   }
@@ -81,7 +92,7 @@ class Search extends Component {
   }
 
   renderSearchFailureView = () => (
-    <div className="failure-view-page-container">
+    <div className="search-page-failure-view-page-container">
       <img
         src="https://res.cloudinary.com/df8n5yti7/image/upload/v1671028483/Background-CompleteSomething_went_wrong_lpwr8q.png"
         alt="failure view"
@@ -153,7 +164,6 @@ class Search extends Component {
                 ))}
               </ul>
             </div>
-
             <div className="pagination-container">
               <button
                 type="button"

@@ -32,31 +32,37 @@ class Home extends Component {
   }
 
   getTopRatedMovies = async () => {
-    this.setState({topRatedMoviesApiStatus: apiStatusConstants.inProgress})
-    const jwtToken = Cookies.get('jwt_token')
-    const apiUrl = 'https://apis.ccbp.in/movies-app/top-rated-movies'
-    const options = {
-      headers: {
-        Authorization: `Bearer ${jwtToken}`,
-      },
-      method: 'GET',
-    }
-    const response = await fetch(apiUrl, options)
-    if (response.ok) {
-      const fetchedData = await response.json()
-      const updatedTopRatedData = fetchedData.results.map(eachMovie => ({
-        backdropPath: eachMovie.backdrop_path,
-        id: eachMovie.id,
-        overview: eachMovie.overview,
-        posterPath: eachMovie.poster_path,
-        name: eachMovie.title,
-      }))
+    try {
+      this.setState({topRatedMoviesApiStatus: apiStatusConstants.inProgress})
+      const jwtToken = Cookies.get('jwt_token')
+      const apiUrl = 'https://apis.ccbp.in/movies-app/top-rated-movies'
+      const options = {
+        headers: {
+          Authorization: `Bearer ${jwtToken}`,
+        },
+        method: 'GET',
+      }
+      const response = await fetch(apiUrl, options)
+      if (response.ok) {
+        const fetchedData = await response.json()
+        const updatedTopRatedData = fetchedData.results.map(eachMovie => ({
+          backdropPath: eachMovie.backdrop_path,
+          id: eachMovie.id,
+          overview: eachMovie.overview,
+          posterPath: eachMovie.poster_path,
+          name: eachMovie.title,
+        }))
 
-      this.setState({
-        topRatedMoviesList: updatedTopRatedData,
-        topRatedMoviesApiStatus: apiStatusConstants.success,
-      })
-    } else {
+        this.setState({
+          topRatedMoviesList: updatedTopRatedData,
+          topRatedMoviesApiStatus: apiStatusConstants.success,
+        })
+      } else if (response.status === 404 || response.status === 401) {
+        this.setState({topRatedMoviesApiStatus: apiStatusConstants.failure})
+      } else {
+        this.setState({topRatedMoviesApiStatus: apiStatusConstants.failure})
+      }
+    } catch (error) {
       this.setState({topRatedMoviesApiStatus: apiStatusConstants.failure})
     }
   }
@@ -113,31 +119,37 @@ class Home extends Component {
   }
 
   getTrendingMovies = async () => {
-    this.setState({trendingMoviesApiStatus: apiStatusConstants.inProgress})
-    const jwtToken = Cookies.get('jwt_token')
-    const apiUrl = 'https://apis.ccbp.in/movies-app/trending-movies'
-    const options = {
-      headers: {
-        Authorization: `Bearer ${jwtToken}`,
-      },
-      method: 'GET',
-    }
-    const response = await fetch(apiUrl, options)
-    if (response.ok) {
-      const fetchedData = await response.json()
-      const updatedTrendingData = fetchedData.results.map(eachMovie => ({
-        backdropPath: eachMovie.backdrop_path,
-        id: eachMovie.id,
-        overview: eachMovie.overview,
-        posterPath: eachMovie.poster_path,
-        name: eachMovie.title,
-      }))
+    try {
+      this.setState({trendingMoviesApiStatus: apiStatusConstants.inProgress})
+      const jwtToken = Cookies.get('jwt_token')
+      const apiUrl = 'https://apis.ccbp.in/movies-app/trending-movies'
+      const options = {
+        headers: {
+          Authorization: `Bearer ${jwtToken}`,
+        },
+        method: 'GET',
+      }
+      const response = await fetch(apiUrl, options)
+      if (response.ok) {
+        const fetchedData = await response.json()
+        const updatedTrendingData = fetchedData.results.map(eachMovie => ({
+          backdropPath: eachMovie.backdrop_path,
+          id: eachMovie.id,
+          overview: eachMovie.overview,
+          posterPath: eachMovie.poster_path,
+          name: eachMovie.title,
+        }))
 
-      this.setState({
-        trendingMoviesList: updatedTrendingData,
-        trendingMoviesApiStatus: apiStatusConstants.success,
-      })
-    } else {
+        this.setState({
+          trendingMoviesList: updatedTrendingData,
+          trendingMoviesApiStatus: apiStatusConstants.success,
+        })
+      } else if (response.status === 404 || response.status === 401) {
+        this.setState({trendingMoviesApiStatus: apiStatusConstants.failure})
+      } else {
+        this.setState({trendingMoviesApiStatus: apiStatusConstants.failure})
+      }
+    } catch (error) {
       this.setState({trendingMoviesApiStatus: apiStatusConstants.failure})
     }
   }
@@ -188,31 +200,37 @@ class Home extends Component {
   }
 
   getOriginalMovies = async () => {
-    this.setState({originalsMoviesApiStatus: apiStatusConstants.inProgress})
-    const jwtToken = Cookies.get('jwt_token')
-    const apiUrl = 'https://apis.ccbp.in/movies-app/originals'
-    const options = {
-      headers: {
-        Authorization: `Bearer ${jwtToken}`,
-      },
-      method: 'GET',
-    }
-    const response = await fetch(apiUrl, options)
-    if (response.ok) {
-      const fetchedData = await response.json()
-      const updatedOriginalsData = fetchedData.results.map(eachMovie => ({
-        backdropPath: eachMovie.backdrop_path,
-        id: eachMovie.id,
-        overview: eachMovie.overview,
-        posterPath: eachMovie.poster_path,
-        name: eachMovie.title,
-      }))
+    try {
+      this.setState({originalsMoviesApiStatus: apiStatusConstants.inProgress})
+      const jwtToken = Cookies.get('jwt_token')
+      const apiUrl = 'https://apis.ccbp.in/movies-app/originals'
+      const options = {
+        headers: {
+          Authorization: `Bearer ${jwtToken}`,
+        },
+        method: 'GET',
+      }
+      const response = await fetch(apiUrl, options)
+      if (response.ok) {
+        const fetchedData = await response.json()
+        const updatedOriginalsData = fetchedData.results.map(eachMovie => ({
+          backdropPath: eachMovie.backdrop_path,
+          id: eachMovie.id,
+          overview: eachMovie.overview,
+          posterPath: eachMovie.poster_path,
+          name: eachMovie.title,
+        }))
 
-      this.setState({
-        originalsMoviesList: updatedOriginalsData,
-        originalsMoviesApiStatus: apiStatusConstants.success,
-      })
-    } else {
+        this.setState({
+          originalsMoviesList: updatedOriginalsData,
+          originalsMoviesApiStatus: apiStatusConstants.success,
+        })
+      } else if (response.status === 404 || response.status === 401) {
+        this.setState({originalsMoviesApiStatus: apiStatusConstants.failure})
+      } else {
+        this.setState({originalsMoviesApiStatus: apiStatusConstants.failure})
+      }
+    } catch (error) {
       this.setState({originalsMoviesApiStatus: apiStatusConstants.failure})
     }
   }

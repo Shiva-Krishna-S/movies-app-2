@@ -34,19 +34,22 @@ class PopularMoviesPagination extends Component {
 
     return (
       <div className="popular-movies-content-container">
-        <ul className="popular-movies-list-container">
-          {currentPageMoviesList.map(eachMovie => (
-            <li className="popular-movie-item" key={eachMovie.id}>
-              <Link to={`/movies/${eachMovie.id}`}>
-                <img
-                  src={eachMovie.posterPath}
-                  alt={eachMovie.title}
-                  className="popular-movie-image"
-                />
-              </Link>
-            </li>
-          ))}
-        </ul>
+        <div className="popular-movies-content-top-container">
+          <ul className="popular-movies-list-container">
+            {currentPageMoviesList.map(eachMovie => (
+              <li className="popular-movie-item" key={eachMovie.id}>
+                <Link to={`/movies/${eachMovie.id}`}>
+                  <img
+                    src={eachMovie.posterPath}
+                    alt={eachMovie.title}
+                    className="popular-movie-image"
+                  />
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+
         <div className="pagination-container">
           <button
             type="button"

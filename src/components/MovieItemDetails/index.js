@@ -28,68 +28,76 @@ class MovieItemDetails extends Component {
   }
 
   getMovieDetails = async parameter => {
-    this.setState({apiStatus: apiStatusConstants.inProgress})
+    try {
+      this.setState({apiStatus: apiStatusConstants.inProgress})
 
-    const jwtToken = Cookies.get('jwt_token')
+      const jwtToken = Cookies.get('jwt_token')
 
-    const {match} = this.props
-    const {params} = match
-    const {id} = params
+      const {match} = this.props
+      const {params} = match
+      const {id} = params
 
-    const requiredId = parameter === undefined ? id : parameter
+      const requiredId = parameter === undefined ? id : parameter
 
-    const apiUrl = `https://apis.ccbp.in/movies-app/movies/${requiredId}`
-    const options = {
-      headers: {
-        Authorization: `Bearer ${jwtToken}`,
-      },
-      method: 'GET',
-    }
-    const response = await fetch(apiUrl, options)
-    if (response.ok) {
-      const fetchedData = await response.json()
-      const fetchedObject = fetchedData.movie_details
-      const updatedData = {
-        adult: fetchedObject.adult,
-        backdropPath: fetchedObject.backdrop_path,
-        budget: fetchedObject.budget,
-        genres: fetchedObject.genres,
-        id: fetchedObject.id,
-        overview: fetchedObject.overview,
-        posterPath: fetchedObject.poster_path,
-        releaseDate: fetchedObject.release_date,
-        runtime: fetchedObject.runtime,
-        similarMovies: fetchedObject.similar_movies,
-        spokenLanguages: fetchedObject.spoken_languages,
-        title: fetchedObject.title,
-        voteAverage: fetchedObject.vote_average,
-        voteCount: fetchedObject.vote_count,
+      const apiUrl = `https://apis.ccbp.in/movies-app/movies/${requiredId}`
+      const options = {
+        headers: {
+          Authorization: `Bearer ${jwtToken}`,
+        },
+        method: 'GET',
       }
-      //   console.log(updatedData)
-      const genresList = updatedData.genres
-      //   console.log(genresList)
-      const similarMoviesList = updatedData.similarMovies.map(eachMovie => ({
-        backdropPath: eachMovie.backdrop_path,
-        posterPath: eachMovie.poster_path,
-        id: eachMovie.id,
-        title: eachMovie.title,
-        overview: eachMovie.overview,
-      }))
-      //   console.log(similarMoviesList)
-      const spokenLanguagesList = updatedData.spokenLanguages.map(eachLang => ({
-        englishName: eachLang.english_name,
-        id: eachLang.id,
-      }))
-      //   console.log(spokenLanguagesList)
+      const response = await fetch(apiUrl, options)
+      if (response.ok) {
+        const fetchedData = await response.json()
+        const fetchedObject = fetchedData.movie_details
+        const updatedData = {
+          adult: fetchedObject.adult,
+          backdropPath: fetchedObject.backdrop_path,
+          budget: fetchedObject.budget,
+          genres: fetchedObject.genres,
+          id: fetchedObject.id,
+          overview: fetchedObject.overview,
+          posterPath: fetchedObject.poster_path,
+          releaseDate: fetchedObject.release_date,
+          runtime: fetchedObject.runtime,
+          similarMovies: fetchedObject.similar_movies,
+          spokenLanguages: fetchedObject.spoken_languages,
+          title: fetchedObject.title,
+          voteAverage: fetchedObject.vote_average,
+          voteCount: fetchedObject.vote_count,
+        }
+        //   console.log(updatedData)
+        const genresList = updatedData.genres
+        //   console.log(genresList)
+        const similarMoviesList = updatedData.similarMovies.map(eachMovie => ({
+          backdropPath: eachMovie.backdrop_path,
+          posterPath: eachMovie.poster_path,
+          id: eachMovie.id,
+          title: eachMovie.title,
+          overview: eachMovie.overview,
+        }))
+        //   console.log(similarMoviesList)
+        const spokenLanguagesList = updatedData.spokenLanguages.map(
+          eachLang => ({
+            englishName: eachLang.english_name,
+            id: eachLang.id,
+          }),
+        )
+        //   console.log(spokenLanguagesList)
 
-      this.setState({
-        movieDetails: updatedData,
-        apiStatus: apiStatusConstants.success,
-        genres: genresList,
-        similarMovies: similarMoviesList.slice(0, 6),
-        spokenLanguages: spokenLanguagesList,
-      })
-    } else {
+        this.setState({
+          movieDetails: updatedData,
+          apiStatus: apiStatusConstants.success,
+          genres: genresList,
+          similarMovies: similarMoviesList.slice(0, 6),
+          spokenLanguages: spokenLanguagesList,
+        })
+      } else if (response.status === 404 || response.status === 401) {
+        this.setState({apiStatus: apiStatusConstants.failure})
+      } else {
+        this.setState({apiStatus: apiStatusConstants.failure})
+      }
+    } catch (error) {
       this.setState({apiStatus: apiStatusConstants.failure})
     }
   }
@@ -105,7 +113,7 @@ class MovieItemDetails extends Component {
   }
 
   renderMovieItemDetailsFailureView = () => (
-    <div className="failure-view-page-container">
+    <div className="movie-item-failure-view-page-container">
       <img
         src="https://res.cloudinary.com/df8n5yti7/image/upload/v1671028483/Background-CompleteSomething_went_wrong_lpwr8q.png"
         alt="failure view"
