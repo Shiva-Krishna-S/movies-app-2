@@ -61,7 +61,7 @@
 
 @media screen and (min-width: 768px) {
   .account-sub-title {
-    font-size: 24px;
+    font-size: 22px;
     line-height: 31px;
     width: 30%;
   }
@@ -89,7 +89,7 @@
 @media screen and (min-width: 768px) {
   .account-sub-details-item {
     font-weight: 400;
-    font-size: 24px;
+    font-size: 21px;
     line-height: 31px;
   }
 }
@@ -134,7 +134,7 @@
 
 @media screen and (min-width: 768px) {
   .content-quality {
-    font-size: 18px;
+    font-size: 16px;
   }
 }
 
@@ -143,8 +143,8 @@
 }
 
 .logout-btn {
-  height: 40px;
-  width: 90px;
+  height: 32px;
+  width: 75px;
   background: #e50914;
   border-radius: 4px;
   font-family: 'Roboto';
@@ -161,6 +161,9 @@
 
 @media screen and (min-width: 768px) {
   .logout-btn {
+    height: 42px;
+    width: 120px;
+    font-size: 19px;
     margin-top: 50px;
   }
 }

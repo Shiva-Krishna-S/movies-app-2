@@ -5,6 +5,8 @@ import Loader from 'react-loader-spinner'
 import Header from '../Header'
 import MoviesSlider from '../MoviesSlider'
 import Footer from '../Footer'
+import TopRatedMovies from '../TopRatedMovies'
+import TrendingMovies from '../TrendingMovies'
 
 import './index.css'
 
@@ -17,186 +19,12 @@ const apiStatusConstants = {
 
 class Home extends Component {
   state = {
-    trendingMoviesList: [],
     originalsMoviesList: [],
-    topRatedMoviesList: [],
-    trendingMoviesApiStatus: apiStatusConstants.initial,
-    topRatedMoviesApiStatus: apiStatusConstants.initial,
     originalsMoviesApiStatus: apiStatusConstants.initial,
   }
 
   componentDidMount() {
-    this.getTrendingMovies()
     this.getOriginalMovies()
-    this.getTopRatedMovies()
-  }
-
-  getTopRatedMovies = async () => {
-    try {
-      this.setState({topRatedMoviesApiStatus: apiStatusConstants.inProgress})
-      const jwtToken = Cookies.get('jwt_token')
-      const apiUrl = 'https://apis.ccbp.in/movies-app/top-rated-movies'
-      const options = {
-        headers: {
-          Authorization: `Bearer ${jwtToken}`,
-        },
-        method: 'GET',
-      }
-      const response = await fetch(apiUrl, options)
-      if (response.ok) {
-        const fetchedData = await response.json()
-        const updatedTopRatedData = fetchedData.results.map(eachMovie => ({
-          backdropPath: eachMovie.backdrop_path,
-          id: eachMovie.id,
-          overview: eachMovie.overview,
-          posterPath: eachMovie.poster_path,
-          name: eachMovie.title,
-        }))
-
-        this.setState({
-          topRatedMoviesList: updatedTopRatedData,
-          topRatedMoviesApiStatus: apiStatusConstants.success,
-        })
-      } else if (response.status === 404 || response.status === 401) {
-        this.setState({topRatedMoviesApiStatus: apiStatusConstants.failure})
-      } else {
-        this.setState({topRatedMoviesApiStatus: apiStatusConstants.failure})
-      }
-    } catch (error) {
-      this.setState({topRatedMoviesApiStatus: apiStatusConstants.failure})
-    }
-  }
-
-  renderMoviesCategoryLoadingView = () => (
-    <div className="movie-category-failure-view" testid="loader">
-      <Loader type="TailSpin" color="#D81F26" height={20} width={20} />
-    </div>
-  )
-
-  onTopRatedMoviesTryAgain = () => {
-    this.getTopRatedMovies()
-  }
-
-  renderTopRatedMoviesFailureView = () => (
-    <div className="movie-category-failure-view">
-      <img
-        src="https://res.cloudinary.com/df8n5yti7/image/upload/v1671379818/alert-trianglefailure_view_bdhscp.png"
-        alt="failure view"
-        className="movie-category-failure-image"
-      />
-      <p className="movie-category-failure-message">
-        Something went wrong. Please try again
-      </p>
-      <button
-        type="button"
-        onClick={this.onTopRatedMoviesTryAgain}
-        className="failure-retry-button"
-      >
-        Try Again
-      </button>
-    </div>
-  )
-
-  renderTopRatedMoviesListView = () => {
-    const {topRatedMoviesList} = this.state
-
-    return <MoviesSlider moviesList={topRatedMoviesList} />
-  }
-
-  renderTopRatedMovies = () => {
-    const {topRatedMoviesApiStatus} = this.state
-
-    switch (topRatedMoviesApiStatus) {
-      case apiStatusConstants.success:
-        return this.renderTopRatedMoviesListView()
-      case apiStatusConstants.failure:
-        return this.renderTopRatedMoviesFailureView()
-      case apiStatusConstants.inProgress:
-        return this.renderMoviesCategoryLoadingView()
-      default:
-        return null
-    }
-  }
-
-  getTrendingMovies = async () => {
-    try {
-      this.setState({trendingMoviesApiStatus: apiStatusConstants.inProgress})
-      const jwtToken = Cookies.get('jwt_token')
-      const apiUrl = 'https://apis.ccbp.in/movies-app/trending-movies'
-      const options = {
-        headers: {
-          Authorization: `Bearer ${jwtToken}`,
-        },
-        method: 'GET',
-      }
-      const response = await fetch(apiUrl, options)
-      if (response.ok) {
-        const fetchedData = await response.json()
-        const updatedTrendingData = fetchedData.results.map(eachMovie => ({
-          backdropPath: eachMovie.backdrop_path,
-          id: eachMovie.id,
-          overview: eachMovie.overview,
-          posterPath: eachMovie.poster_path,
-          name: eachMovie.title,
-        }))
-
-        this.setState({
-          trendingMoviesList: updatedTrendingData,
-          trendingMoviesApiStatus: apiStatusConstants.success,
-        })
-      } else if (response.status === 404 || response.status === 401) {
-        this.setState({trendingMoviesApiStatus: apiStatusConstants.failure})
-      } else {
-        this.setState({trendingMoviesApiStatus: apiStatusConstants.failure})
-      }
-    } catch (error) {
-      this.setState({trendingMoviesApiStatus: apiStatusConstants.failure})
-    }
-  }
-
-  onTrendingTryAgain = () => {
-    this.getTrendingMovies()
-  }
-
-  renderTrendingFailureView = () => (
-    <div className="movie-category-failure-view">
-      <img
-        src="https://res.cloudinary.com/df8n5yti7/image/upload/v1671379818/alert-trianglefailure_view_bdhscp.png"
-        alt="failure view"
-        className="movie-category-failure-image"
-      />
-      <p className="movie-category-failure-message">
-        Something went wrong. Please try again
-      </p>
-      <button
-        type="button"
-        onClick={this.onTrendingTryAgain}
-        className="failure-retry-button"
-      >
-        Try Again
-      </button>
-    </div>
-  )
-
-  renderTrendingMoviesListView = () => {
-    const {trendingMoviesList} = this.state
-
-    return <MoviesSlider moviesList={trendingMoviesList} />
-  }
-
-  renderTrendingMovies = () => {
-    const {trendingMoviesApiStatus} = this.state
-
-    switch (trendingMoviesApiStatus) {
-      case apiStatusConstants.success:
-        return this.renderTrendingMoviesListView()
-      case apiStatusConstants.failure:
-        return this.renderTrendingFailureView()
-      case apiStatusConstants.inProgress:
-        return this.renderMoviesCategoryLoadingView()
-      default:
-        return null
-    }
   }
 
   getOriginalMovies = async () => {
@@ -235,9 +63,11 @@ class Home extends Component {
     }
   }
 
-  onOriginalsTryAgain = () => {
-    this.getOriginalMovies()
-  }
+  renderMoviesCategoryLoadingView = () => (
+    <div className="movie-category-failure-view" testid="loader">
+      <Loader type="TailSpin" color="#D81F26" height={20} width={20} />
+    </div>
+  )
 
   renderOriginalsFailureView = () => (
     <div className="movie-category-failure-view">
@@ -286,7 +116,7 @@ class Home extends Component {
     </div>
   )
 
-  onRandomMovieFailureTryAgain = () => {
+  onOriginalsTryAgain = () => {
     this.getOriginalMovies()
   }
 
@@ -302,7 +132,7 @@ class Home extends Component {
       </p>
       <button
         type="button"
-        onClick={this.onRandomMovieFailureTryAgain}
+        onClick={this.onOriginalsTryAgain}
         className="failure-retry-button"
       >
         Try Again
@@ -311,11 +141,7 @@ class Home extends Component {
   )
 
   renderRandomMovie = () => {
-    const {
-      trendingMoviesApiStatus,
-      originalsMoviesApiStatus,
-      originalsMoviesList,
-    } = this.state
+    const {originalsMoviesApiStatus, originalsMoviesList} = this.state
 
     const randomMovie =
       originalsMoviesList[
@@ -323,9 +149,7 @@ class Home extends Component {
       ]
     const {name, overview, backdropPath} = randomMovie
 
-    const pageContentsLoading =
-      trendingMoviesApiStatus === 'IN_PROGRESS' ||
-      originalsMoviesApiStatus === 'IN_PROGRESS'
+    const pageContentsLoading = originalsMoviesApiStatus === 'IN_PROGRESS'
 
     return (
       <div
@@ -363,10 +187,9 @@ class Home extends Component {
   }
 
   render() {
-    const {trendingMoviesApiStatus, originalsMoviesApiStatus} = this.state
-    const pageContentsLoading =
-      trendingMoviesApiStatus === 'IN_PROGRESS' ||
-      originalsMoviesApiStatus === 'IN_PROGRESS'
+    const {originalsMoviesApiStatus} = this.state
+
+    const pageContentsLoading = originalsMoviesApiStatus === 'IN_PROGRESS'
 
     return (
       <div className="home-background-container">
@@ -375,9 +198,9 @@ class Home extends Component {
         )}
         {this.renderRandomMovieContainer()}
         <h1 className="movies-category-title">Trending Now</h1>
-        {this.renderTrendingMovies()}
+        <TrendingMovies />
         <h1 className="movies-category-title">Popular</h1>
-        {this.renderTopRatedMovies()}
+        <TopRatedMovies />
         <h1 className="movies-category-title">Originals</h1>
         {this.renderOriginalMovies()}
         <Footer />

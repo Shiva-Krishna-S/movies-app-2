@@ -14,14 +14,8 @@ class Login extends Component {
 
   onSubmitSuccess = jwtToken => {
     const {history} = this.props
-    // console.log(history.location.pathname)
 
     Cookies.set('jwt_token', jwtToken, {expires: 30})
-
-    // const {username, password} = this.state
-    // Cookies.set('userName', username, {expires: 30, path: '/'})
-    // const encodedPassword = btoa(password)
-    // Cookies.set('passWord', encodedPassword, {expires: 30, path: '/'})
 
     history.replace('/')
   }

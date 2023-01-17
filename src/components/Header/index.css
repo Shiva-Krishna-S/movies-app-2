@@ -92,7 +92,7 @@
 }
 
 .navbar-route-list-tab-name {
-  font-family: 'HK Grotesk';
+  font-family: 'Roboto';
   font-style: normal;
   font-weight: 500;
   font-size: 16px;
@@ -137,7 +137,7 @@
   width: 80%;
   background-color: transparent;
   color: #babdc2;
-  font-family: 'HK Grotesk';
+  font-family: 'Roboto';
   font-style: normal;
   font-weight: 500;
   font-size: 12px;
@@ -199,14 +199,21 @@
 }
 
 .navbar-main-container-tab {
-  font-family: 'HK Grotesk';
+  font-family: 'Roboto';
   font-style: normal;
   font-weight: 400;
   font-size: 16px;
   line-height: 26px;
   letter-spacing: -0.355556px;
   color: #ffffff;
-  margin-right: 35px;
+  margin-right: 30px;
+}
+
+@media screen and (min-width: 1000px) {
+  .navbar-main-container-tab {
+    font-size: 18px;
+    margin-right: 55px;
+  }
 }
 
 .active {
@@ -222,7 +229,7 @@
   margin-left: 28px;
 }
 
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 767px) {
   .header-profile-icon-container {
     display: none;
   }

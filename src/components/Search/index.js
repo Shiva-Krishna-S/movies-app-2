@@ -105,7 +105,7 @@ class Search extends Component {
         <button
           type="button"
           onClick={this.onTryAgain}
-          className='failure-view-page-try-again-btn"'
+          className="failure-view-page-try-again-btn"
         >
           Try Again
         </button>

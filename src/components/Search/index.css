@@ -67,13 +67,6 @@
   min-height: 85vh;
 }
 
-@media screen and (min-width: 768px) {
-  .no-movies-found-container {
-    margin-top: 95px;
-    margin-bottom: 95px;
-  }
-}
-
 .no-movies-found-image {
   width: 80%;
   max-width: 350px;
@@ -86,7 +79,7 @@
 }
 
 .no-movies-found-msg {
-  font-family: 'HK Grotesk';
+  font-family: 'Roboto';
   font-style: normal;
   font-weight: 500;
   font-size: 16px;
@@ -144,14 +137,14 @@
   text-align: center;
 }
 
-.failure-view-page-try-again-btn {
+.search-failure-view-page-try-again-btn {
+  cursor: pointer;
   width: 107px;
   height: 40px;
   background: #ffffff;
   border-radius: 4px;
   border: none;
   outline: none;
-  cursor: pointer;
   font-family: 'Roboto';
   font-style: normal;
   font-weight: 600;
@@ -161,9 +154,10 @@
 }
 
 @media screen and (min-width: 768px) {
-  .failure-view-page-try-again-btn {
-    width: 150px;
-    height: 60px;
+  .search-failure-view-page-try-again-btn {
+    width: 135px;
+    height: 55px;
+    font-size: 18px;
   }
 }
 
